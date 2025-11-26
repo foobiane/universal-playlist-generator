@@ -1,8 +1,9 @@
 "use client"
 
+import React from "react"
+
 import { CONSUMER_KEY, CONSUMER_SECRET } from "./auth";
 import SongInfo from "./playlist";
-import React from "react"
 
 var Discogs = require("disconnect").Client;
 
@@ -27,7 +28,7 @@ export default class SearchBar extends React.Component {
             var songs : SongInfo[] = [];
 
             db.search(query, (err, data) => {
-                var limit = 3;
+                var limit = 10;
 
                 for (const result of data.results) {
                     var m = new Map(Object.entries(result));
@@ -61,8 +62,9 @@ export default class SearchBar extends React.Component {
                     <input name = "query" />
                     <button type = "submit">Search</button>
                 </form>
-                {this.state.searchSuccess && this.state.searchResults.map((value) => {return value.render()})}
-                <p>I am a paragraph</p>
+                <ul style = {{display: "table"}}>
+                    {this.state.searchSuccess && this.state.searchResults.map((value) => {return value.render()})}
+                </ul>
             </div>
         );
     }

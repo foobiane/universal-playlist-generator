@@ -1,0 +1,29 @@
+.SongInfo {
+  display: block;
+  outline: 1px solid #ffffff;
+  white-space: nowrap;
+  width: 100%
+}
+
+.SongInfo .Thumb {
+    display: inline-block;
+    width: 100px;
+    height: 100%;
+    vertical-align: middle;
+    padding: 10px;
+    // margin: auto;
+}
+
+.SongInfo .InfoText {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+.SongInfo .AddSongButton {
+    float: right;
+    font-size: 20px;
+    color: rgb(80, 192, 230);
+    padding: 10px;
+}
