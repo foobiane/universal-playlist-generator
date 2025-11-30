@@ -11,7 +11,7 @@ export default class SongInfo extends React.Component {
     discogsUrl: string;
     objectUuid: string;
 
-    constructor(discogsData: Map<string, any>) {
+    constructor(discogsData: Map<string, any>, addable: boolean = true) {
         super({});
 
         this.name = discogsData.get("title");
@@ -55,40 +55,48 @@ export default class SongInfo extends React.Component {
     }
 }
 
-class Playlist extends React.Component {
+export class Playlist extends React.Component {
+    name: string;
+    dateCreated: string;
     songs: SongInfo[];
 
     constructor() {
         super({});
+
+        this.name = "New Playlist";
         this.songs = [];
+        this.dateCreated = (new Date()).toLocaleDateString();
+
+        this.setState({isEditingName: false});
     }
 
+    // Adds a song to the playlist.
     addSong(s: SongInfo): void {
         this.songs.push(s);
     }
 
+    // Removes a song from the playlist via index.
     removeSong(idx: number) : void {
         delete this.songs[idx];
     }
 
-    combine(other: Playlist) : void {
-        // TODO
+    // Imports playlist from an exported JSON file string.
+    fromJson(jsonString: string) {
+        var jsonMap: Map<string, any> = new Map(Object.entries(JSON.parse(jsonString)));
+
+        this.name = jsonMap.get("name");
+        this.dateCreated = jsonMap.get("dateCreated");
+        this.songs = jsonMap.get("songs");
     }
 
-    toSpotify() {
-
-    }
-
-    toAppleMusic() {
-
-    }
-
-    toYouTube() {
-
-    }
-
+    // Exports the current playlist to a JSON string.
     toJson() {
         return JSON.stringify(this);
+    }
+
+    // Handles when 
+    onNameChange(e) {
+
     }
 
     render() {
@@ -98,7 +106,18 @@ class Playlist extends React.Component {
             songsRendered.push(song.render());
 
         return (
-            <p>{songsRendered}</p>
+            <div>
+                {this.state.isEditingName ? 
+                    <form>
+                        <input onChange = {onNameChange} defaultValue = {this.name}/>
+                    </form> : 
+                    <h1 onDoubleClick = {() => {this.state.isEditingName = true}}>{this.name}</h1>
+                }
+                <p>{songsRendered}</p>
+            </div>
         );
     }
 }
+
+// The main playlist on the page.
+export var currentPlaylist = new Playlist();
