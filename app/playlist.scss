@@ -1,11 +1,16 @@
 .SongInfo {
-  display: block;
-  outline: 1px solid #ffffff;
-  white-space: nowrap;
-  width: 100%
+    width: 100%;
+    padding: 5px 10px; 
 }
 
-.SongInfo .Thumb {
+.SongInfo .Inner {
+    width: 100%;
+    display: inline-block;
+    outline: 1px solid #ffffff;
+    white-space: nowrap;
+}
+
+.SongInfo .Inner .Thumb {
     display: inline-block;
     width: 100px;
     height: 100%;
@@ -14,16 +19,22 @@
     // margin: auto;
 }
 
-.SongInfo .InfoText {
+.SongInfo .Inner .InfoText {
     display: inline-block;
     height: 100%;
     vertical-align: middle;
     padding: 10px;
 }
 
-.SongInfo .AddSongButton {
+.SongInfo .Inner .AddSongButton {
     float: right;
     font-size: 20px;
     color: rgb(80, 192, 230);
     padding: 10px;
+}
+
+.Playlist {
+    display: inline-block;
+    width: 50%;
+    // margin: 10px;
 }

@@ -1,9 +1,11 @@
+"use client"
+
 import React from "react"
 import { v4 as uuidv4 } from "uuid";
 
 import "./playlist.scss"
 
-export default class SongInfo extends React.Component {
+export class SongInfo extends React.Component {
     name: string;
     year: number;
     genres: string;
@@ -11,8 +13,8 @@ export default class SongInfo extends React.Component {
     discogsUrl: string;
     objectUuid: string;
 
-    constructor(discogsData: Map<string, any>, addable: boolean = true) {
-        super({});
+    constructor(props, discogsData: Map<string, any>, addable: boolean = true) {
+        super(props);
 
         this.name = discogsData.get("title");
         this.year = discogsData.get("year");
@@ -33,23 +35,25 @@ export default class SongInfo extends React.Component {
         return (
             <li 
                 className = {"SongInfo"}
-                key = {this.objectUuid} // TODO: Use a uuid or something
+                key = {this.objectUuid}
             >
-                <img 
-                    className = {"Thumb"}
-                    src = {this.thumbnailUrl}
-                />
-                <p className = {"InfoText"}>
-                    <b>{this.name}</b><br />
-                    {this.year}<br />
-                    {this.genres}
-                </p>
-                <button
-                    className = {"AddSongButton"}
-                    onClick = {this.onAddSong}
-                >
-                    +
-                </button>
+                <div className = {"Inner"}>
+                    <img 
+                        className = {"Thumb"}
+                        src = {this.thumbnailUrl}
+                    />
+                    <p className = {"InfoText"}>
+                        <b>{this.name}</b><br />
+                        {this.year}<br />
+                        {this.genres}
+                    </p>
+                    <button
+                        className = {"AddSongButton"}
+                        onClick = {this.onAddSong}
+                    >
+                        +
+                    </button>
+                </div>
             </li>
         );
     }
@@ -60,14 +64,16 @@ export class Playlist extends React.Component {
     dateCreated: string;
     songs: SongInfo[];
 
-    constructor() {
-        super({});
+    constructor(props) {
+        super(props);
 
         this.name = "New Playlist";
         this.songs = [];
         this.dateCreated = (new Date()).toLocaleDateString();
 
-        this.setState({isEditingName: false});
+        this.state = {
+            isEditingName: false
+        };
     }
 
     // Adds a song to the playlist.
@@ -94,26 +100,22 @@ export class Playlist extends React.Component {
         return JSON.stringify(this);
     }
 
-    // Handles when 
     onNameChange(e) {
 
     }
 
     render() {
-        const songsRendered = [];
-
-        for (const song of this.songs)
-            songsRendered.push(song.render());
-
         return (
-            <div>
+            <div className = "Playlist">
                 {this.state.isEditingName ? 
                     <form>
                         <input onChange = {onNameChange} defaultValue = {this.name}/>
                     </form> : 
                     <h1 onDoubleClick = {() => {this.state.isEditingName = true}}>{this.name}</h1>
                 }
-                <p>{songsRendered}</p>
+                <div>
+                    {this.songs.map((value) => {return value.render()})}
+                </div>
             </div>
         );
     }

@@ -1,0 +1,15 @@
+.SearchBar {
+    display: inline-block;
+    width: 50%;
+}
+
+.SearchBar .SearchForm {
+    width: 100%;
+    padding: 10px;
+}
+
+.SearchBar .SearchForm .Box {
+    padding: 5px;
+    outline: 1px solid white;
+    width: 100%;
+}

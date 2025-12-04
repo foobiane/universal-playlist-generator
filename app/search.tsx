@@ -3,7 +3,9 @@
 import React from "react"
 
 import { CONSUMER_KEY, CONSUMER_SECRET } from "./auth";
-import SongInfo from "./playlist";
+import { SongInfo } from "./playlist";
+
+import "./search.scss"
 
 var Discogs = require("disconnect").Client;
 
@@ -34,7 +36,7 @@ export default class SearchBar extends React.Component {
                     var m = new Map(Object.entries(result));
 
                     if (m.get("type") === "master") {
-                        songs.push(new SongInfo(m));
+                        songs.push(new SongInfo({}, m));
                         limit--;
                     }
 
@@ -57,10 +59,17 @@ export default class SearchBar extends React.Component {
 
     render() {
         return (
-            <div>
-                <form action = {this.onFormSubmit.bind(this)}>
-                    <input name = "query" />
-                    <button type = "submit">Search</button>
+            <div className = {"SearchBar"}>
+                <form 
+                    className = {"SearchForm"}
+                    action = {this.onFormSubmit.bind(this)}
+                >
+                    <input 
+                        className = {"Box"}
+                        placeholder = "Search..."
+                        name = "query" 
+                    />
+                    <button type = "submit"></button>
                 </form>
                 <ul style = {{display: "table"}}>
                     {this.state.searchSuccess && this.state.searchResults.map((value) => {return value.render()})}
