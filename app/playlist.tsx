@@ -12,23 +12,22 @@ export class SongInfo extends React.Component {
     thumbnailUrl: string;
     discogsUrl: string;
     objectUuid: string;
+    addable: boolean;
 
     constructor(props, discogsData: Map<string, any>, addable: boolean = true) {
         super(props);
 
         this.name = discogsData.get("title");
         this.year = discogsData.get("year");
-
         this.genres = discogsData.get("style").join(", ");
-
         this.thumbnailUrl = discogsData.get("cover_image");
         this.discogsUrl = "https://discogs.com" + discogsData.get("uri");
-
         this.objectUuid = uuidv4();
+        this.addable = addable;
     }
 
     onAddSong() {
-
+        currentPlaylist.addSong(this);
     }
 
     render() {
@@ -47,12 +46,12 @@ export class SongInfo extends React.Component {
                         {this.year}<br />
                         {this.genres}
                     </p>
-                    <button
-                        className = {"AddSongButton"}
-                        onClick = {this.onAddSong}
-                    >
-                        +
-                    </button>
+                    {this.addable ?
+                        <button
+                            className = {"AddSongButton"}
+                            onClick = {this.onAddSong}
+                        >+</button> : <div></div>
+                    }
                 </div>
             </li>
         );
@@ -68,50 +67,30 @@ export class Playlist extends React.Component {
         super(props);
 
         this.name = "New Playlist";
-        this.songs = [];
         this.dateCreated = (new Date()).toLocaleDateString();
+        this.songs = []
 
         this.state = {
-            isEditingName: false
+            isEditingName: false,
         };
-    }
-
-    // Adds a song to the playlist.
-    addSong(s: SongInfo): void {
-        this.songs.push(s);
-    }
-
-    // Removes a song from the playlist via index.
-    removeSong(idx: number) : void {
-        delete this.songs[idx];
-    }
-
-    // Imports playlist from an exported JSON file string.
-    fromJson(jsonString: string) {
-        var jsonMap: Map<string, any> = new Map(Object.entries(JSON.parse(jsonString)));
-
-        this.name = jsonMap.get("name");
-        this.dateCreated = jsonMap.get("dateCreated");
-        this.songs = jsonMap.get("songs");
-    }
-
-    // Exports the current playlist to a JSON string.
-    toJson() {
-        return JSON.stringify(this);
-    }
-
-    onNameChange(e) {
-
     }
 
     render() {
         return (
             <div className = "Playlist">
                 {this.state.isEditingName ? 
-                    <form>
-                        <input onChange = {onNameChange} defaultValue = {this.name}/>
+                    <form 
+                        action = {(e) => {
+                            this.name = e.get("name");
+                            this.setState({isEditingName: false});
+                        }}
+                    >
+                        <input 
+                            defaultValue = {this.name}
+                            name = "name"
+                        />
                     </form> : 
-                    <h1 onDoubleClick = {() => {this.state.isEditingName = true}}>{this.name}</h1>
+                    <h1 onDoubleClick = {() => {this.setState({isEditingName: true})}}>{this.name}</h1>
                 }
                 <div>
                     {this.songs.map((value) => {return value.render()})}
@@ -120,6 +99,3 @@ export class Playlist extends React.Component {
         );
     }
 }
-
-// The main playlist on the page.
-export var currentPlaylist = new Playlist();

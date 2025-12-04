@@ -69,9 +69,8 @@ export default class SearchBar extends React.Component {
                         placeholder = "Search..."
                         name = "query" 
                     />
-                    <button type = "submit"></button>
                 </form>
-                <ul style = {{display: "table"}}>
+                <ul style = {{display: "table", width: "100%"}}>
                     {this.state.searchSuccess && this.state.searchResults.map((value) => {return value.render()})}
                 </ul>
             </div>

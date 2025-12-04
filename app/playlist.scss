@@ -5,9 +5,10 @@
 
 .SongInfo .Inner {
     width: 100%;
-    display: inline-block;
+    display: flex;
+    align-items: center;
     outline: 1px solid #ffffff;
-    white-space: nowrap;
+    // white-space: nowrap;
 }
 
 .SongInfo .Inner .Thumb {
@@ -27,10 +28,17 @@
 }
 
 .SongInfo .Inner .AddSongButton {
-    float: right;
+    background-color: rgb(80, 192, 230);
+    outline: 1px solid white;
+    width: 20px;
+    height: 20px;
+    margin: 10px 10px auto auto;
+    order: 2;
+    border-radius: 2px;
     font-size: 20px;
-    color: rgb(80, 192, 230);
-    padding: 10px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
 }
 
 .Playlist {
