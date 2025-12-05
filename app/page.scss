@@ -8,3 +8,17 @@
     display: flex;
     // align-items: center;
 }
+
+.AboutPanel {
+    display: inline-block;
+    margin: 0 10px;
+    width: 33%;
+}
+
+.AboutPanel h1 {
+    font-weight: 900;
+}
+
+.AboutPanel p {
+    padding-bottom: 20px;
+}

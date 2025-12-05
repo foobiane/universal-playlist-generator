@@ -59,19 +59,19 @@ export default class SearchBar extends React.Component {
 
     render() {
         return (
-            <div className = {"SearchBar"}>
+            <div className = "SearchBar">
                 <form 
-                    className = {"SearchForm"}
+                    className = "SearchForm"
                     action = {this.onFormSubmit.bind(this)}
                 >
                     <input 
-                        className = {"Box"}
+                        className = "Box"
                         placeholder = "Search..."
                         name = "query" 
                     />
                 </form>
                 <ul style = {{display: "table", width: "100%"}}>
-                    {this.state.searchSuccess && this.state.searchResults.map((value) => {return value.render()})}
+                    {this.state.searchResults.map((value) => {return value.render()})}
                 </ul>
             </div>
         );
