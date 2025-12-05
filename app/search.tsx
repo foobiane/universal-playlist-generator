@@ -36,7 +36,7 @@ export default class SearchBar extends React.Component {
                     var m = new Map(Object.entries(result));
 
                     if (m.get("type") === "master") {
-                        songs.push(new SongInfo({}, m));
+                        songs.push(new SongInfo({songAdd: this.props.songAdd, songRemove: this.props.songRemove}, m));
                         limit--;
                     }
 

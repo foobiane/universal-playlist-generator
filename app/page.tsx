@@ -13,16 +13,31 @@ function SiteTitle() {
   );
 }
 
-const [playlistSongs, setPlaylistSongs] = useState({
-  songs: []
-});
-
 export default function Home() {
+  const [songs, setSongs] = useState<SongInfo[]>([]);
+
+  var songAdd = (newSong: SongInfo) => {
+    newSong.addable = false;
+
+    setSongs([...songs, newSong]);
+    console.log(songs.length);
+  };
+
+  var songRemove = (song: SongInfo) => {
+    song.addable = true;
+
+    setSongs(songs.filter((value) => {
+      value != song;
+    }));
+  };
+
   return (
     <div>
       <SiteTitle />
-      <SearchBar />
-      <Playlist />
+      <div className = "Content">
+        <SearchBar songAdd = {songAdd} songRemove = {songRemove} />
+        <Playlist songs = {songs}/>
+      </div>
     </div>
   );
 }

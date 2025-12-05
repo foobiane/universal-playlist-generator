@@ -8,6 +8,7 @@
     display: flex;
     align-items: center;
     outline: 1px solid #ffffff;
+    border-radius: 5px;
     // white-space: nowrap;
 }
 
@@ -41,8 +42,31 @@
     color: white;
 }
 
+.SongInfo .Inner .RemoveSongButton {
+    background-color: rgb(230, 80, 80);
+    outline: 1px solid white;
+    width: 20px;
+    height: 20px;
+    margin: 10px 10px auto auto;
+    order: 2;
+    border-radius: 2px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+}
+
 .Playlist {
     display: inline-block;
-    width: 50%;
-    // margin: 10px;
+    width: 33%;
+}
+
+.Playlist .Info {
+    padding-left: 10px;
+}
+
+.Playlist .Info .Title {
+    width: 100%;
+    font-size: 20px;
+    font-weight: bold;
 }
