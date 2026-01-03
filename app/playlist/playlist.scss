@@ -1,6 +1,6 @@
 .SongInfo {
     width: 100%;
-    padding: 5px 10px; 
+    padding: 5px 0;
 }
 
 .SongInfo .Inner {
@@ -63,14 +63,31 @@
 .Playlist {
     display: inline-block;
     width: 33%;
+    padding: 0 10px;
 }
 
 .Playlist .Info {
-    padding-left: 10px;
+
 }
 
 .Playlist .Info .Title {
     width: 100%;
     font-size: 20px;
     font-weight: bold;
+}
+
+.Playlist .ShareButton {
+    color: rgb(80, 192, 230);
+}
+
+.Playlist .NoSongsMessage {
+    display: block;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.Playlist .NoSongsMessage .ImportJsonButton {
+    color: rgb(80, 192, 230);
 }

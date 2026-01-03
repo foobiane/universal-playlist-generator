@@ -1,0 +1,52 @@
+.SharePanel {
+    position: absolute;
+    left: 37.5%;
+    top: 25%;
+    width: 25%; 
+    height: 50%;
+
+    background-color: black;
+    border: 1px solid white;
+    border-radius: 10px;
+
+    vertical-align: middle;
+    // align-items: center;
+}
+
+.SharePanel .Inner {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.SharePanel .Inner h1 {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    // padding: 20px 0;
+}
+
+.SharePanel .Inner ul {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.SharePanel .Inner .CloseButton {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: rgb(80, 192, 230);
+    outline: 1px solid white;
+    width: 20px;
+    height: 20px;
+    order: 2;
+    border-radius: 2px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+}
