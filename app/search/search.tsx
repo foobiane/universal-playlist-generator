@@ -3,7 +3,7 @@
 import { useState} from "react"
 
 import { CONSUMER_KEY, CONSUMER_SECRET } from "../auth";
-import { SongInfo } from "../playlist/playlist";
+import SongInfo from "../playlist/playlist";
 
 import "./search.scss"
 
@@ -24,10 +24,8 @@ function songSearch(formData: FormData) {
             var limit = 10;
 
             for (const result of data.results) {
-                var m = new Map(Object.entries(result));
-
-                if (m.get("type") === "master") {
-                    songs.push(m);
+                if (result.type == "master") {
+                    songs.push(result);
                     limit--;
                 }
 
@@ -39,13 +37,7 @@ function songSearch(formData: FormData) {
     });
 }
 
-function onFormSubmit(e: FormData) {
-    songSearch(e).then((value) => {
-        searchResults = value;
-    });
-}
-
-export default function SearchBar() {
+export default function SearchBar(props) {
     const [searchResults, setSearchResults] = useState([]);
 
     return (
@@ -67,7 +59,13 @@ export default function SearchBar() {
                 />
             </form>
             <ul className = "SearchResults">
-                {searchResults.map((result) => {return SongInfo(result)})}
+                {searchResults.map((result) => {
+                    result.addable = true;
+                    result.addSongToPlaylist = props.addSongToPlaylist;
+                    result.removeSongFromPlaylist = props.removeSongFromPlaylist;
+                    
+                    return SongInfo(result);
+                })}
             </ul>
         </div>
     );

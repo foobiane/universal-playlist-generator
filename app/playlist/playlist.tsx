@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import { React, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { saveAs } from "file-saver";
 import { inspect } from "util";
@@ -12,7 +12,7 @@ var util = require("util");
 
 var songInfoCount = 0;
 
-export function SongInfo(props) {
+export default function SongInfo(props) {
     return (
         <li 
             className = "SongInfo"
@@ -21,39 +21,33 @@ export function SongInfo(props) {
             <div className = "Inner">
                 <img 
                     className = "Thumb"
-                    src = {props.thumbnailUrl}
+                    src = {props.cover_image}
                 />
                 <p className = "InfoText">
-                    <b>{props.name}</b><br />
+                    <b>{props.title}</b><br />
                     {props.year}<br />
-                    {props.genres}<br />
-                    <a href = {props.discogsUrl}>Discogs Link</a>
+                    {props.genre.join(", ")}<br />
+                    <a href = {"https://discogs.com/" + props.uri}>Discogs Link</a>
                 </p>
                 {props.addable ?
                     <button
                         className = "AddSongButton"
-                        onClick = {() => {props.playlist.addSong(props)}}
+                        onClick = {() => {
+                            props.addable = false
+                            props.addSongToPlaylist(props);
+                        }}
                     >+</button> : 
                     <button
                         className = "RemoveSongButton"
-                        onClick = {() => {props.playlist.removeSong(props)}}
+                        onClick = {() => {
+                            props.removeSongFromPlaylist(props);
+                        }}
                     >-</button>
                 }
             </div>
         </li>
     );
 }
-
-/**
- * Props:
- * {
- *      isEditingName: boolean;
- *      name: string;
- *      dateCreated: string;
- *      songs: Map<string, any>[];
- *      toggleSharePanel: function;
- * }
- */
 
 export function Playlist(props) {
     return (
@@ -107,58 +101,3 @@ export function Playlist(props) {
         </div>
     );
 }
-
-// export class Playlist extends React.Component {
-//     name: string;
-//     objectUuid: string;
-
-//     constructor(props) {
-//         super(props);
-
-//         this.name = "New Playlist";
-//         this.state = {
-//             songs: [],
-//             isEditingName: false,
-//             dateCreated: "",
-//             showingSharePanel: false
-//         };
-
-//         this.objectUuid = uuidv4();
-//     }
-
-//     addSong(s: SongInfo) {
-//         const newSongs = this.state.songs.concat(s);
-//         this.setState({songs: newSongs});
-//     }
-
-//     removeSong(s: SongInfo) {
-//         const newSongs = this.state.songs.filter((song: SongInfo) => {return song.objectUuid != s.objectUuid})
-//         this.setState({songs: newSongs});
-//     }
-
-//     componentDidMount() {
-//         var d = new Date();
-//         this.setState({dateCreated: d.toLocaleDateString() + " " + d.toLocaleTimeString()});
-//     }
-
-//     toJson() {
-//         var seen: object[] = []
-
-//         var s: string = JSON.stringify(this, (key, value) => {
-//             if (value instanceof Promise)
-//                 return "[Promise]"; // we don't really care about promise items...
-
-//             else if (typeof value === "object" && value !== null) {
-//                 if (seen.indexOf(value) >= 0)
-//                     return "[Cycle]";
-
-//                 seen.push(value);
-//             }
-
-//             return value;
-//         });
-
-//         var blob: Blob = new Blob([s], {type: "text/plain;charset=utf-8"});
-//         FileSaver.saveAs(blob, "playlist-" + this.objectUuid + ".json");
-//     }
-// }

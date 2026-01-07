@@ -8,6 +8,9 @@ import "./page.scss"
 
 import React, { useState } from "react"
 
+const DATE = new Date()
+const DATE_STR = DATE.toLocaleDateString() + " " + DATE.toLocaleTimeString()
+
 function SiteTitle() {
     return (
         <div className = "SiteTitle">universal playlist generator</div>
@@ -34,15 +37,30 @@ function About() {
 
 export default function Home() {
     const [showingAboutPanel, setShowingAboutPanel] = useState(false);
-    const [showingSharePanel, setShowingSharePanel] = useState(false)
+    const [showingSharePanel, setShowingSharePanel] = useState(false);
+
+    const [playlistArr, setPlaylistArr] = useState([])
+
+    const addSongToPlaylist = (newSong) => {setPlaylistArr(playlistArr.concat(newSong))}
+    const removeSongFromPlaylist = (song) => {setPlaylistArr(playlistArr.filter((query) => {return query != song}))}
 
     return (
         <div>
             <SiteTitle />
 
             <div className = "Content">
-                <SearchBar />
+                <SearchBar 
+                    addSongToPlaylist = {addSongToPlaylist}
+                    removeSongFromPlaylist = {removeSongFromPlaylist}
+                />
                 
+                <Playlist 
+                    name = "New Playlist"
+                    isEditingName = {false}
+                    songs = {playlistArr} 
+                    dateCreated = {DATE_STR}
+                />
+
                 {showingAboutPanel ?
                     <div>
                         <About />
