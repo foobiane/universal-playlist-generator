@@ -1,9 +1,6 @@
 "use client"
 
-import { React, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { saveAs } from "file-saver";
-import { inspect } from "util";
+import { useState } from "react";
 
 import "./playlist.scss"
 
@@ -33,7 +30,6 @@ export default function SongInfo(props) {
                     <button
                         className = "AddSongButton"
                         onClick = {() => {
-                            props.addable = false
                             props.addSongToPlaylist(props);
                         }}
                     >+</button> : 
@@ -49,53 +45,74 @@ export default function SongInfo(props) {
     );
 }
 
+function loadJson(files: FileList, loadFromJson) {
+    var file = files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        var asText = reader.result;
+        var asObj = JSON.parse(asText);
+        loadFromJson(asObj);
+    }
+
+    reader.readAsText(file);
+}
+
 export function Playlist(props) {
+    const [isEditingName, setIsEditingName] = useState(false);
+
     return (
         <div className = "Playlist">
-            <div className = "Info">
-                {props.isEditingName ? 
-                    <form 
-                        action = {(e) => {
-                            props.name = e.get("name");
-                            props.isEditingName = false;
-                        }}
-                    >
-                        <input 
-                            className = "Title"
-                            defaultValue = {props.name}
-                            name = "name"
-                        />
-                    </form> : 
-                    <h1 
+            {isEditingName ? 
+                <form 
+                    action = {(e) => {
+                        props.setName(e.get("name"));
+                        setIsEditingName(false);
+                    }}
+                >
+                    <input 
                         className = "Title"
-                        onDoubleClick = {() => {
-                            props.isEditingName = true;
-                        }}
-                    >
-                        {props.name}
-                    </h1>
-                }
-                <p>Date Created: {props.dateCreated}</p>
-            </div>
+                        defaultValue = {props.name}
+                        name = "name"
+                    />
+                </form> : 
+                <h1 
+                    className = "Title"
+                    onDoubleClick = {() => {
+                        setIsEditingName(true);
+                    }}
+                >
+                    {props.name}
+                </h1>
+            }
+            <p>Date Created: {props.dateCreated}</p>
 
             <ul style = {{display: "table", width: "100%"}}>
-                {props.songs.map((songInfoProps: Map<string, any>) => {return SongInfo(songInfoProps)})}
+                {props.songs.map((song) => {
+                    song.addable = false;
+                    return SongInfo(song);
+                })}
             </ul>
 
             {props.songs.length > 0 ?
                 <button 
                     className = "ShareButton"
-                    onClick = {() => {props.toggleSharePanel()}}
+                    onClick = {() => {props.showSharePanel()}}
                 >
                 share</button> :
 
                 <p className = "NoSongsMessage">
-                    no songs added. add songs by searching on the left, or
-                    <button
-                        className = "ImportJsonButton"
-                        onClick = {() => {}}
-                    >
-                    import from json</button>.
+                    no songs added. add songs by searching on the left, or&nbsp;
+                    <input
+                        id = "jsonUpload"
+                        className = "hidden"
+                        type = "file"
+                        accept = ".json"
+                        onChange = {(files) => {loadJson(files, props.loadFromJson)}}
+                    />
+                    <label htmlFor = "jsonUpload" className = "ImportJsonButton">
+                        import from json.
+                    </label>
                 </p>
             }
         </div>

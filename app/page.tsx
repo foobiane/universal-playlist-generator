@@ -1,15 +1,12 @@
 "use client"
 
 import SearchBar from "./search/search"
-import { SongInfo, Playlist } from "./playlist/playlist"
+import { Playlist } from "./playlist/playlist"
 import SharePanel from "./share/share"
 
 import "./page.scss"
 
-import React, { useState } from "react"
-
-const DATE = new Date()
-const DATE_STR = DATE.toLocaleDateString() + " " + DATE.toLocaleTimeString()
+import { useState } from "react"
 
 function SiteTitle() {
     return (
@@ -36,16 +33,42 @@ function About() {
 }
 
 export default function Home() {
-    const [showingAboutPanel, setShowingAboutPanel] = useState(false);
-    const [showingSharePanel, setShowingSharePanel] = useState(false);
-
+    // Playlist metadata
+    const [playlistName, setPlaylistName] = useState("New Playlist");
     const [playlistArr, setPlaylistArr] = useState([])
 
-    const addSongToPlaylist = (newSong) => {setPlaylistArr(playlistArr.concat(newSong))}
-    const removeSongFromPlaylist = (song) => {setPlaylistArr(playlistArr.filter((query) => {return query != song}))}
+    const [dateCreated, setDateCreated] = useState(new Intl.DateTimeFormat(undefined, {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric"
+    }).format(new Date()));
+
+    // Callbacks 
+    const addSongToPlaylist = (newSong) => {
+        setPlaylistArr(playlistArr.concat(newSong));
+    }
+    
+    const removeSongFromPlaylist = (song) => {
+        setPlaylistArr(playlistArr.filter((query) => {
+            return query != song;
+        }))
+    }
+
+    const loadFromJson = (jsonObj) => {
+        setPlaylistName(jsonObj.name);
+        setPlaylistArr(jsonObj.songs);
+        setDateCreated(jsonObj.dateCreated);
+    };
+
+    // Display state
+    const [showingSharePanel, setShowingSharePanel] = useState(false);
+    const showSharePanel = () => {setShowingSharePanel(true)};
+    const hideSharePanel = () => {setShowingSharePanel(false)};
 
     return (
-        <div>
+        <>
             <SiteTitle />
 
             <div className = "Content">
@@ -55,29 +78,20 @@ export default function Home() {
                 />
                 
                 <Playlist 
-                    name = "New Playlist"
-                    isEditingName = {false}
+                    name = {playlistName}
+                    dateCreated = {dateCreated}
                     songs = {playlistArr} 
-                    dateCreated = {DATE_STR}
+
+                    setName = {setPlaylistName}
+                    showSharePanel = {showSharePanel}
+                    loadFromJson = {loadFromJson}
                 />
 
-                {showingAboutPanel ?
-                    <div>
-                        <About />
-                        <button
-                            onClick = {() => {setShowingAboutPanel(true)}}
-                        >hide about [-]</button>
-                    </div> :
-                    <button
-                        onClick = {() => {setShowingAboutPanel(false)}}
-                    >show about [+]</button>
+                {showingSharePanel ?
+                    <SharePanel hideSharePanel = {hideSharePanel} /> :
+                    <></>
                 }
             </div>
-
-            {false ? 
-                <SharePanel toggleSharePanel = {setShowingSharePanel} /> : 
-                <></>
-            }
-        </div>
+        </>
     );
 }
